@@ -9,16 +9,21 @@ part 'letter_field.g.dart';
 class LetterField {
   final key = GlobalKey<ShakeAnimationState>();
   String letter;
-  int background;
+  int? background;
   int? borderColor;
 
   LetterField({
     required this.letter,
-    required this.background,
+    this.background,
     this.borderColor
   });
 
-  LetterField.changeBorderColor(this.letter, this.background, this.borderColor);
+  LetterField.updateBox(this.letter, this.background, this.borderColor);
+
+  LetterField.updateLetter(this.letter) {
+    background = AppColors.selectedRowLetterBoxBackground;
+    borderColor = AppColors.selectedRowBorder;
+  }
 
   factory LetterField.emptyState() => LetterField(
     letter: "",

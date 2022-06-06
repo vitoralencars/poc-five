@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:pocs_flutter/di/service_locator.dart';
 import 'package:pocs_flutter/model/player_history_data.dart';
+import 'package:pocs_flutter/store/player_history_store.dart';
 import 'package:pocs_flutter/util/app_colors.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:math';
 
 class PlayerHistory extends StatefulWidget {
   const PlayerHistory({
-    Key? key,
-    required this.historyData
+    Key? key
   }) : super(key: key);
-
-  final PlayerHistoryData historyData;
 
   @override
   State<PlayerHistory> createState() => _PlayerHistoryState();
 }
 
 class _PlayerHistoryState extends State<PlayerHistory> {
+  final _store = serviceLocator<PlayerHistoryStore>();
+
+  @override
+  initState() {
+    super.initState();
+    _store.fetchPlayerHistory();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var data = widget.historyData;
+    //var data = widget.historyData;
 
     return Wrap(
       children: [
@@ -33,24 +41,28 @@ class _PlayerHistoryState extends State<PlayerHistory> {
               topRight: Radius.circular(25)
             )
           ),
-          child: Column(
-            children: [
-              _buildHistoryTitleContainer(),
-              const SizedBox(height: 20),
-              _buildHistoryDataRow(data),
-              const SizedBox(height: 30),
-              Text(
-                "Tentativas",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color(AppColors.defaultTextColor),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-              _buildTriesChart(data)
-            ],
-          ),
+          child: Observer(
+            builder: (_) {
+              return Column(
+                children: [
+                  _buildHistoryTitleContainer(),
+                  const SizedBox(height: 20),
+                  _buildHistoryDataRow(_store.playerHistory),
+                  const SizedBox(height: 30),
+                  Text(
+                    "Tentativas",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color(AppColors.defaultTextColor),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  _buildTriesChart(_store.playerHistory),
+                ],
+              );
+            },
+          )
         ),
       ],
     );

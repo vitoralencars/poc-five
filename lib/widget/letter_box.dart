@@ -21,17 +21,17 @@ class _LetterBoxState extends State<LetterBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(AppColors.homeBackground),
-      body: Center(
+    return Center(
         child: Card(
           shape: RoundedRectangleBorder(
-            side: BorderSide(
-                color: widget.letterField.borderColor != null ?
-                  Color(widget.letterField.borderColor!) : Colors.transparent,
+              side: BorderSide(
+                color: Color(
+                  widget.letterField.borderColor ??
+                  AppColors.transparent
+                ),
                 width: 2
-            ),
-            borderRadius: BorderRadius.circular(8)
+              ),
+              borderRadius: BorderRadius.circular(8)
           ),
           elevation: 5,
           child: Container(
@@ -39,26 +39,28 @@ class _LetterBoxState extends State<LetterBox> {
             height: 50,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: Color(widget.letterField.background),
+              color: Color(
+                widget.letterField.background ??
+                AppColors.letterBoxDefaultBackground
+              ),
               borderRadius: BorderRadius.circular(8),
             ),
             child: ShakeAnimation(
-              key: widget.letterField.key,
-              shakeCount: 3,
-              shakeOffset: 10,
-              shakeDuration: const Duration(milliseconds: 500),
-              child: Text(
-                widget.letterField.letter,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold
+                key: widget.letterField.key,
+                shakeCount: 3,
+                shakeOffset: 10,
+                shakeDuration: const Duration(milliseconds: 500),
+                child: Text(
+                    widget.letterField.letter,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold
+                    )
                 )
-              )
             ),
           ),
         )
-      )
     );
   }
 }

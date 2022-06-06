@@ -8,7 +8,7 @@ part of 'letter_field.dart';
 
 LetterField _$LetterFieldFromJson(Map<String, dynamic> json) => LetterField(
       letter: json['letter'] as String,
-      background: json['background'] as int,
+      background: json['background'] as int?,
       borderColor: json['borderColor'] as int?,
     );
 

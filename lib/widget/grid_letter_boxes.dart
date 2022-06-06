@@ -7,14 +7,10 @@ class GridLetterBoxes extends StatefulWidget {
   const GridLetterBoxes({
     Key? key,
     required this.wordLength,
-    required this.attemptsAllowed,
-    required this.currentIndex,
     required this.lettersList
   }) : super(key: key);
 
   final int wordLength;
-  final int attemptsAllowed;
-  final int currentIndex;
   final List<LetterField> lettersList;
 
   @override

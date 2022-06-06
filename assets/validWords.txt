@@ -6139,3 +6139,5 @@ criar
 rugar
 vedar
 urdir
+canil
+covil

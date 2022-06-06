@@ -47,7 +47,7 @@ class _CountDownTimerState extends State<CountDownTimer> {
           style: TextStyle(
             color: Color(AppColors.defaultTextColor),
             fontWeight: FontWeight.bold,
-            fontSize: 25
+            fontSize: 22
           ),
         )
       ],

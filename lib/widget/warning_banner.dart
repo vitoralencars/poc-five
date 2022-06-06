@@ -6,31 +6,29 @@ class WarningBanner extends StatelessWidget {
   const WarningBanner({
     Key? key,
     required this.warning,
-    required this.showBanner,
     required this.rightWord
   }) : super(key: key);
 
   final WarningType? warning;
-  final bool showBanner;
   final String rightWord;
 
   @override
   Widget build(BuildContext context) {
-    Warning warning = _getWarning(rightWord);
+    Warning warningBanner = _getWarning(rightWord);
 
     return Center(
       child: AnimatedOpacity(
-        opacity: showBanner ? 1 : 0,
+        opacity: warning != WarningType.hiddenState ? 1 : 0,
         duration: const Duration(milliseconds: 250),
         child: Container(
           margin: const EdgeInsets.all(2),
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: warning.backgroundColor,
+            color: warningBanner.backgroundColor,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
-            warning.message,
+            warningBanner.message,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 18
@@ -59,7 +57,7 @@ class WarningBanner extends StatelessWidget {
 }
 
 enum WarningType {
-  initialState,
+  hiddenState,
   invalidWord,
   incompleteWord,
   rightWord,
