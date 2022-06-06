@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pocs_flutter/animation/shake_animation.dart';
+import 'package:five/animation/shake_animation.dart';
 import '../util/app_colors.dart';
 
 part 'letter_field.g.dart';

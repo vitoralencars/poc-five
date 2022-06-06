@@ -1,7 +1,7 @@
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:pocs_flutter/model/letter_field.dart';
-import 'package:pocs_flutter/util/handler/letter_box_handler.dart';
+import 'package:five/model/letter_field.dart';
+import 'package:five/util/handler/letter_box_handler.dart';
 import '../../model/keyboard_key.dart';
 import '../app_colors.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:pocs_flutter/animation/animation_controller.dart';
+import 'package:five/animation/animation_controller.dart';
 
 class ShakeAnimation extends StatefulWidget {
   const ShakeAnimation({

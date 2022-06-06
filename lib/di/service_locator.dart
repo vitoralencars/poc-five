@@ -1,9 +1,9 @@
 import 'package:get_it/get_it.dart';
-import 'package:pocs_flutter/service/client/api_client.dart';
-import 'package:pocs_flutter/service/repository/daily_word_repository.dart';
-import 'package:pocs_flutter/service/usecase/fetch_daily_word_usecase.dart';
-import 'package:pocs_flutter/store/main_store.dart';
-import 'package:pocs_flutter/store/player_history_store.dart';
+import 'package:five/service/client/api_client.dart';
+import 'package:five/service/repository/daily_word_repository.dart';
+import 'package:five/service/usecase/fetch_daily_word_usecase.dart';
+import 'package:five/store/main_store.dart';
+import 'package:five/store/player_history_store.dart';
 
 final GetIt serviceLocator = GetIt.I;
 

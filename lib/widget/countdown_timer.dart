@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:pocs_flutter/util/app_colors.dart';
+import 'package:five/util/app_colors.dart';
 
 class CountDownTimer extends StatefulWidget {
   const CountDownTimer({

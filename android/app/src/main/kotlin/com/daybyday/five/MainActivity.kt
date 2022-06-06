@@ -1,4 +1,4 @@
-package com.daybyday.pocs_flutter
+package com.daybyday.five
 
 import io.flutter.embedding.android.FlutterActivity
 

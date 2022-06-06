@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pocs_flutter/model/letter_field.dart';
-import 'package:pocs_flutter/widget/letter_box.dart';
-import 'package:pocs_flutter/util/app_colors.dart';
+import 'package:five/model/letter_field.dart';
+import 'package:five/widget/letter_box.dart';
+import 'package:five/util/app_colors.dart';
 
 class GridLetterBoxes extends StatefulWidget {
   const GridLetterBoxes({

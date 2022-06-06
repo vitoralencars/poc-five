@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:pocs_flutter/store/main_store.dart';
-import 'package:pocs_flutter/store/player_history_store.dart';
-import 'package:pocs_flutter/util/handler/word_handler.dart';
-import 'package:pocs_flutter/widget/border_icon_button.dart';
-import 'package:pocs_flutter/widget/countdown_timer.dart';
-import 'package:pocs_flutter/widget/error_screen.dart';
-import 'package:pocs_flutter/widget/grid_letter_boxes.dart';
-import 'package:pocs_flutter/widget/keyboard.dart';
-import 'package:pocs_flutter/widget/loading_lottie.dart';
-import 'package:pocs_flutter/view/player_history.dart';
-import 'package:pocs_flutter/widget/tutorial_dialog.dart';
-import 'package:pocs_flutter/widget/warning_banner.dart';
-import 'package:pocs_flutter/util/app_colors.dart';
+import 'package:five/store/main_store.dart';
+import 'package:five/store/player_history_store.dart';
+import 'package:five/util/handler/word_handler.dart';
+import 'package:five/widget/border_icon_button.dart';
+import 'package:five/widget/countdown_timer.dart';
+import 'package:five/widget/error_screen.dart';
+import 'package:five/widget/grid_letter_boxes.dart';
+import 'package:five/widget/keyboard.dart';
+import 'package:five/widget/loading_lottie.dart';
+import 'package:five/view/player_history.dart';
+import 'package:five/widget/tutorial_dialog.dart';
+import 'package:five/widget/warning_banner.dart';
+import 'package:five/util/app_colors.dart';
 import '../di/service_locator.dart';
 
 void main() async {

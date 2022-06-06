@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pocs_flutter/animation/shake_animation.dart';
-import 'package:pocs_flutter/model/letter_field.dart';
-import 'package:pocs_flutter/util/app_colors.dart';
+import 'package:five/animation/shake_animation.dart';
+import 'package:five/model/letter_field.dart';
+import 'package:five/util/app_colors.dart';
 
 class LetterBox extends StatefulWidget {
   const LetterBox({

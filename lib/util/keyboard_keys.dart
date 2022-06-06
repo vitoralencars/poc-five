@@ -1,5 +1,5 @@
-import 'package:pocs_flutter/model/keyboard_key.dart';
-import 'package:pocs_flutter/util/app_colors.dart';
+import 'package:five/model/keyboard_key.dart';
+import 'package:five/util/app_colors.dart';
 
 class KeyboardKeys {
   static final firstRow = ["Q","W","E","R","T","Y","U","I","O","P"];

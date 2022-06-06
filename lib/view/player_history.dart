@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:pocs_flutter/di/service_locator.dart';
-import 'package:pocs_flutter/model/player_history_data.dart';
-import 'package:pocs_flutter/store/player_history_store.dart';
-import 'package:pocs_flutter/util/app_colors.dart';
+import 'package:five/di/service_locator.dart';
+import 'package:five/model/player_history_data.dart';
+import 'package:five/store/player_history_store.dart';
+import 'package:five/util/app_colors.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:math';
 

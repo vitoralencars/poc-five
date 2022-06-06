@@ -1,6 +1,6 @@
-import 'package:pocs_flutter/model/letter_field.dart';
-import 'package:pocs_flutter/util/app_colors.dart';
-import 'package:pocs_flutter/util/handler/keyboard_key_handler.dart';
+import 'package:five/model/letter_field.dart';
+import 'package:five/util/app_colors.dart';
+import 'package:five/util/handler/keyboard_key_handler.dart';
 import '../../model/keyboard_key.dart';
 import '../keyboard_keys.dart';
 

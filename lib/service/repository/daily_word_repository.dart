@@ -1,4 +1,4 @@
-import 'package:pocs_flutter/service/client/api_client.dart';
+import 'package:five/service/client/api_client.dart';
 import '../../model/daily_word.dart';
 
 class DailyWordRepository {
