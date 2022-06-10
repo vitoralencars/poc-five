@@ -1,10 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:five/widget/screen_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:five/store/main_store.dart';
 import 'package:five/store/player_history_store.dart';
 import 'package:five/util/handler/word_handler.dart';
-import 'package:five/widget/border_icon_button.dart';
 import 'package:five/widget/countdown_timer.dart';
 import 'package:five/widget/error_screen.dart';
 import 'package:five/widget/grid_letter_boxes.dart';
@@ -14,24 +15,31 @@ import 'package:five/view/player_history.dart';
 import 'package:five/widget/tutorial_dialog.dart';
 import 'package:five/widget/warning_banner.dart';
 import 'package:five/util/app_colors.dart';
-import '../di/service_locator.dart';
+import 'di/service_locator.dart';
+import 'firebase/firebase_options.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await setupFirebase();
   await WordHandler.setupValidWords();
-  await setupLocator();
-  runApp(const MyApp());
+  setupLocator();
+  runApp(const FiveApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+Future<void> setupFirebase() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+}
+
+class FiveApp extends StatelessWidget {
+  const FiveApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        backgroundColor: Colors.white
+        backgroundColor: Color(AppColors.homeBackground)
       ),
       home: const MainPage()
     );
@@ -208,31 +216,13 @@ class _MainPageState extends State<MainPage> {
           child: Center(
             child: Observer(
               builder: (_) {
-                return _mainStore.isLoading ? const LoadingLottie() : _mainStore.isError ?
+                return _mainStore.isLoading ? const LoadingScreen() : _mainStore.isError ?
                 ErrorScreen(onTryAgain: _fetchDailyWord) :
                 Column(
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          BorderIconButton(
-                            icon: Icons.history,
-                            onPressed: _showHistoryBottomSheet,
-                          ),
-                          Text(
-                            "FIVE",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Color(AppColors.defaultTextColor),
-                                fontSize: 40,
-                                fontWeight: FontWeight.bold
-                            ),
-                          ),
-                          BorderIconButton(
-                            icon: Icons.question_mark,
-                            onPressed: _showTutorialDialog,
-                          )
-                        ],
+                      ScreenHeader(
+                        onHistoryPressed: _showHistoryBottomSheet,
+                        onInstructionsPressed: _showTutorialDialog
                       ),
                       Visibility(
                           visible: _mainStore.isFinishedDailyGame,

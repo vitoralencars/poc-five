@@ -8,19 +8,17 @@ class ShakeAnimation extends StatefulWidget {
     required this.child,
     required this.shakeOffset,
     this.shakeCount = 3,
-    this.shakeDuration = const Duration(milliseconds: 400),
   }) : super(key: key);
   final Widget child;
   final double shakeOffset;
   final int shakeCount;
-  final Duration shakeDuration;
 
   @override
-  ShakeAnimationState createState() => ShakeAnimationState(shakeDuration);
+  ShakeAnimationState createState() => ShakeAnimationState();
 }
 
 class ShakeAnimationState extends AnimationControllerState<ShakeAnimation> {
-  ShakeAnimationState(Duration duration) : super(duration);
+  ShakeAnimationState() : super(const Duration(milliseconds: 500));
 
   @override
   void initState() {

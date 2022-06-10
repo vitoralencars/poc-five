@@ -7,7 +7,7 @@ part 'letter_field.g.dart';
 
 @JsonSerializable()
 class LetterField {
-  final key = GlobalKey<ShakeAnimationState>();
+  GlobalKey<ShakeAnimationState> key = GlobalKey<ShakeAnimationState>();
   String letter;
   int? background;
   int? borderColor;

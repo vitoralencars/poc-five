@@ -31,7 +31,10 @@ class _GridLetterBoxesState extends State<GridLetterBoxes> {
         crossAxisCount: widget.wordLength,
         childAspectRatio: 1,
         children: widget.lettersList.map((letterField) {
-          return LetterBox(letterField: letterField);
+          return LetterBox(
+            letterField: letterField,
+            index: widget.lettersList.indexOf(letterField)
+          );
         }).toList()
       )
     );

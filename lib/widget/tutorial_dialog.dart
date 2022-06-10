@@ -166,16 +166,16 @@ class TutorialDialog extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildLetterBox("C", AppColors.noLetter),
-        _buildLetterBox("A", AppColors.rightLetterPosition),
-        _buildLetterBox("N", AppColors.noLetter),
-        _buildLetterBox("T", AppColors.noLetter),
-        _buildLetterBox("O", AppColors.wrongLetterPosition),
+        _buildLetterBox("C", AppColors.noLetter, 0),
+        _buildLetterBox("A", AppColors.rightLetterPosition, 1),
+        _buildLetterBox("N", AppColors.noLetter, 2),
+        _buildLetterBox("T", AppColors.noLetter, 3),
+        _buildLetterBox("O", AppColors.wrongLetterPosition, 4),
       ],
     );
   }
 
-  Widget _buildLetterBox(String letter, int background) {
+  Widget _buildLetterBox(String letter, int background, int index) {
     return SizedBox(
       height: 50,
       width: 50,
@@ -183,7 +183,8 @@ class TutorialDialog extends StatelessWidget {
         letterField: LetterField(
           letter: letter,
           background: background
-        )
+        ),
+        index: index,
       ),
     );
   }

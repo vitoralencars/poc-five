@@ -7,7 +7,8 @@ import 'package:five/store/player_history_store.dart';
 
 final GetIt serviceLocator = GetIt.I;
 
-Future<void> setupLocator() async {
+void setupLocator() {
+
   //Client
   serviceLocator.registerLazySingleton<ApiClient>(() => ApiClient());
 
