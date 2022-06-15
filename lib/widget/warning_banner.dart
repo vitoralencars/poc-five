@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:five/util/app_colors.dart';
 import '../model/warning.dart';
+import '../util/constant/app_colors.dart';
 
 class WarningBanner extends StatelessWidget {
   const WarningBanner({

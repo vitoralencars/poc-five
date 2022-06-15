@@ -1,7 +1,7 @@
 import 'package:diacritic/diacritic.dart';
 import 'package:five/model/keyboard_key.dart';
-import 'package:five/util/app_colors.dart';
-import 'package:five/util/keyboard_keys.dart';
+import '../constant/app_colors.dart';
+import '../constant/keyboard_keys.dart';
 
 class KeyboardKeyHandler {
 

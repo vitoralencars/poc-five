@@ -1,16 +1,17 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:five/animation/shake_animation.dart';
-import '../util/app_colors.dart';
+import '../util/constant/app_colors.dart';
 
 part 'letter_field.g.dart';
 
 @JsonSerializable()
 class LetterField {
-  GlobalKey<ShakeAnimationState> key = GlobalKey<ShakeAnimationState>();
+  ValueKey key = ValueKey(Random());
   String letter;
   int? background;
   int? borderColor;
+  bool shake = false;
 
   LetterField({
     required this.letter,

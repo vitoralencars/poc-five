@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:five/util/app_colors.dart';
+import '../util/constant/app_colors.dart';
 
 class ErrorScreen extends StatelessWidget {
   const ErrorScreen({

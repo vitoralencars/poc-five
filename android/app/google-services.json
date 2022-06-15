@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "127718123341",
+    "project_id": "five-d6734",
+    "storage_bucket": "five-d6734.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127718123341:android:c12c31315543c1c3b7f904",
+        "android_client_info": {
+          "package_name": "com.daybyday.five"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127718123341-ul9n8d7s3dnrok2t62pucc9731lve9kg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5cyhPXqUygxGx22nJm3oWXaNpexD9AhU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127718123341-ul9n8d7s3dnrok2t62pucc9731lve9kg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "127718123341-v3o7kp3qh2heecodbebb0f19ka0jngjm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.daybyday.five"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,60 +1,45 @@
+import 'package:five/util/constant/number_values.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
-import 'package:five/animation/animation_controller.dart';
 
-class ShakeAnimation extends StatefulWidget {
-  const ShakeAnimation({
+class ShakeAnim extends StatelessWidget {
+  const ShakeAnim({
     Key? key,
+    this.duration = const Duration(
+      milliseconds: NumberValues.letterShakeDuration
+    ),
+    this.deltaX = 40,
+    this.curve = Curves.bounceOut,
+    this.isShakeEnabled = false,
     required this.child,
-    required this.shakeOffset,
-    this.shakeCount = 3,
   }) : super(key: key);
+
+  final Duration duration;
+  final double deltaX;
   final Widget child;
-  final double shakeOffset;
-  final int shakeCount;
+  final Curve curve;
+  final bool isShakeEnabled;
 
-  @override
-  ShakeAnimationState createState() => ShakeAnimationState();
-}
-
-class ShakeAnimationState extends AnimationControllerState<ShakeAnimation> {
-  ShakeAnimationState() : super(const Duration(milliseconds: 500));
-
-  @override
-  void initState() {
-    super.initState();
-    animationController.addStatusListener(_updateStatus);
-  }
-
-  @override
-  void dispose() {
-    animationController.removeStatusListener(_updateStatus);
-    super.dispose();
-  }
-
-  void _updateStatus(AnimationStatus status) {
-    if (status == AnimationStatus.completed) {
-      animationController.reset();
-    }
-  }
-
-  void shake() {
-    animationController.forward();
-  }
+  double shake(double animation) =>
+      2 * (0.5 - (0.5 - curve.transform(animation)).abs());
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: animationController,
-      child: widget.child,
-      builder: (context, child) {
-        final sineValue =
-        sin(widget.shakeCount * 2 * pi * animationController.value);
-        return Transform.translate(
-          offset: Offset(sineValue * widget.shakeOffset, 0),
-          child: child,
-        );
-      },
-    );
+    if (!isShakeEnabled) {
+      return Container(
+        child: child,
+      );
+    } else {
+      return TweenAnimationBuilder<double>(
+        key: key,
+        tween: Tween(begin: 0.0, end: 1.0),
+        duration: duration,
+        builder: (context, animation, child) =>
+          Transform.translate(
+            offset: Offset(deltaX * shake(animation), 0),
+            child: child,
+          ),
+        child: child,
+      );
+    }
   }
 }

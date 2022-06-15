@@ -1,10 +1,10 @@
-import 'dart:math';
-
-import 'package:five/animation/shake.dart';
-import 'package:flutter/material.dart';
 import 'package:five/animation/shake_animation.dart';
+import 'package:flutter/material.dart';
 import 'package:five/model/letter_field.dart';
-import 'package:five/util/app_colors.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import '../util/constant/app_colors.dart';
+import '../di/service_locator.dart';
+import '../store/main_store.dart';
 
 class LetterBox extends StatefulWidget {
   const LetterBox({
@@ -21,22 +21,23 @@ class LetterBox extends StatefulWidget {
 }
 
 class _LetterBoxState extends State<LetterBox> {
+  final _mainStore = serviceLocator<MainStore>();
 
   @override
   Widget build(BuildContext context) {
-    Key sKey = ValueKey(widget.index);
+    LetterField letterField = widget.letterField;
 
     return Center(
         child: Card(
           shape: RoundedRectangleBorder(
-              side: BorderSide(
-                color: Color(
-                  widget.letterField.borderColor ??
-                  AppColors.transparent
-                ),
-                width: 2
+            side: BorderSide(
+              color: Color(
+                letterField.borderColor ??
+                AppColors.transparent
               ),
-              borderRadius: BorderRadius.circular(8)
+              width: 2
+            ),
+            borderRadius: BorderRadius.circular(8)
           ),
           elevation: 5,
           child: Container(
@@ -45,36 +46,27 @@ class _LetterBoxState extends State<LetterBox> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: Color(
-                widget.letterField.background ??
+                letterField.background ??
                 AppColors.letterBoxDefaultBackground
               ),
               borderRadius: BorderRadius.circular(8),
             ),
-            /*child: ShakeAnim(
-              //key: widget.letterField.key,
-              key: ValueKey(10),
-              child: Text(
-                  widget.letterField.letter,
-                  style: const TextStyle(
+            child: Observer(
+              builder: (_) {
+                return ShakeAnim(
+                  key: letterField.key,
+                  isShakeEnabled: _mainStore.playedLetters[widget.index].shake,
+                  child: Text(
+                    letterField.letter,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 25,
                       fontWeight: FontWeight.bold
-                  )
-              ),
-            ),*/
-            child: ShakeAnimation(
-                key: ValueKey(Random(1000)),
-                shakeCount: 3,
-                shakeOffset: 10,
-                child: Text(
-                    widget.letterField.letter,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold
                     )
-                )
-            ),
+                  ),
+                );
+              },
+            )
           ),
         )
     );

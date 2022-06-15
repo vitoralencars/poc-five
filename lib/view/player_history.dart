@@ -3,8 +3,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:five/di/service_locator.dart';
 import 'package:five/model/player_history_data.dart';
 import 'package:five/store/player_history_store.dart';
-import 'package:five/util/app_colors.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import '../util/constant/app_colors.dart';
 import 'dart:math';
 
 class PlayerHistory extends StatefulWidget {

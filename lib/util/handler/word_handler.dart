@@ -3,7 +3,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:five/model/letter_field.dart';
 import 'package:five/util/handler/letter_box_handler.dart';
 import '../../model/keyboard_key.dart';
-import '../app_colors.dart';
+import '../constant/app_colors.dart';
 
 class WordHandler {
 
@@ -110,16 +110,12 @@ class WordHandler {
     return allLettersCorrect;
   }
 
-  static Future<WordValidation> wordValidationResult(String typpedWord) async {
+  static WordValidation wordValidationResult(String typpedWord) {
     if (typpedWord.length < 5) {
       return WordValidation.incompleteWord;
     }
 
-    var validWords = await _fetchValidWords(
-      'assets/validWordsNoDiactrics.txt'
-    );
-
-    if (!validWords.contains(typpedWord.toLowerCase())) {
+    if (!_validWords.contains(typpedWord.toLowerCase())) {
       return WordValidation.invalidWord;
     }
 

@@ -1,17 +1,16 @@
 import 'dart:convert';
+import 'package:five/util/constant/number_values.dart';
 import 'package:mobx/mobx.dart';
 import 'package:five/model/daily_word.dart';
 import 'package:five/service/usecase/fetch_daily_word_usecase.dart';
-import 'package:five/util/app_colors.dart';
 import 'package:five/util/handler/word_handler.dart';
-import 'package:five/util/preferences_keys.dart';
+import 'package:five/util/constant/preferences_keys.dart';
 import 'package:five/util/shared_preferences_helper.dart';
 import 'package:five/widget/warning_banner.dart';
 import '../di/service_locator.dart';
 import '../model/keyboard_key.dart';
 import '../model/letter_field.dart';
-import '../model/player_history_data.dart';
-import '../util/keyboard_keys.dart';
+import '../util/constant/keyboard_keys.dart';
 
 part 'main_store.g.dart';
 
@@ -138,8 +137,8 @@ abstract class _MainStore with Store {
     _setLoadingVisible(false);
   }
 
-  Future<bool> _isValidWord() async {
-    switch(await WordHandler.wordValidationResult(_getTyppedWord())) {
+  bool _isValidWord() {
+    switch(WordHandler.wordValidationResult(_getTyppedWord())) {
       case WordValidation.incompleteWord:
         _setWarningType(WarningType.incompleteWord);
         return false;
@@ -153,8 +152,19 @@ abstract class _MainStore with Store {
 
   void shakeInvalidWord() {
     for (int i = _minIndex; i <=  _maxIndex; i++) {
-      playedLetters[i].key.currentState?.shake();
+      playedLetters[i].shake = true;
     }
+    _resetShakeState();
+  }
+
+  void _resetShakeState() {
+    Future.delayed(const Duration(
+        milliseconds: NumberValues.letterShakeDuration
+    ), () {
+      for (int i = _minIndex; i <=  _maxIndex; i++) {
+        playedLetters[i].shake = false;
+      }
+    });
   }
 
   Future<void> _fetchPlayedLettersList() async {
@@ -276,11 +286,11 @@ abstract class _MainStore with Store {
   void _handleWarningBannerType() {
     switch (warningType) {
       case WarningType.wrongWord:
-        break;
+      case WarningType.rightWord:
       case WarningType.hiddenState:
         break;
       default:
-        _hideWarningBannerAfterTime(2);
+        _hideWarningBannerAfterTime(NumberValues.warningBannerDuration);
     }
   }
 
@@ -386,6 +396,8 @@ abstract class _MainStore with Store {
   void _handleFinishedTries() {
     if (!isWordGuessed) {
       _setWarningType(WarningType.wrongWord);
+    } else {
+      _setWarningType(WarningType.rightWord);
     }
 
     _saveWordIsMissed(!isWordGuessed);

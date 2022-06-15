@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:five/util/app_colors.dart';
+import '../util/constant/app_colors.dart';
 
 class BorderIconButton extends StatelessWidget {
   const BorderIconButton({

@@ -1,8 +1,8 @@
 import 'package:five/model/letter_field.dart';
-import 'package:five/util/app_colors.dart';
 import 'package:five/util/handler/keyboard_key_handler.dart';
 import '../../model/keyboard_key.dart';
-import '../keyboard_keys.dart';
+import '../constant/app_colors.dart';
+import '../constant/keyboard_keys.dart';
 
 class LetterBoxHandler {
 

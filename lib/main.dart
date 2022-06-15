@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:five/util/constant/app_colors.dart';
 import 'package:five/widget/screen_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -14,7 +15,6 @@ import 'package:five/widget/loading_lottie.dart';
 import 'package:five/view/player_history.dart';
 import 'package:five/widget/tutorial_dialog.dart';
 import 'package:five/widget/warning_banner.dart';
-import 'package:five/util/app_colors.dart';
 import 'di/service_locator.dart';
 import 'firebase/firebase_options.dart';
 
@@ -85,12 +85,12 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _setDisposers() {
-    _setWarningBannerDispose();
     _setIsGuessingTriesFinishedDispose();
+    _setWarningBannerDispose();
     _setIsFirstTimeDispose();
   }
 
-  void _setWarningBannerDispose() {
+  void _setIsGuessingTriesFinishedDispose() {
     _disposers.add(reaction((_) => _mainStore.isGuessingTriesFinished,
       (isGuessingTriesFinished) {
         if (isGuessingTriesFinished != null &&
@@ -103,7 +103,7 @@ class _MainPageState extends State<MainPage> {
     ));
   }
 
-  void _setIsGuessingTriesFinishedDispose() {
+  void _setWarningBannerDispose() {
     _disposers.add(reaction((_) => _mainStore.warningType, (warningType) {
       if (warningType != null && warningType is WarningType) {
         _handleWarningBanner(warningType);

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:mobx/mobx.dart';
 import 'package:five/model/player_history_data.dart';
-import 'package:five/util/preferences_keys.dart';
+import 'package:five/util/constant/preferences_keys.dart';
 import 'package:five/util/shared_preferences_helper.dart';
 
 part 'player_history_store.g.dart';
