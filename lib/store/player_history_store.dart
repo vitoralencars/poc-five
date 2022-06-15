@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:mobx/mobx.dart';
 import 'package:five/model/player_history_data.dart';
 import 'package:five/util/constant/preferences_keys.dart';
-import 'package:five/util/shared_preferences_helper.dart';
+import 'package:five/util/handler/shared_preferences_handler.dart';
 
 part 'player_history_store.g.dart';
 
@@ -21,7 +21,7 @@ abstract class _PlayerHistoryStore with Store {
       _playerHistory = playerHistory;
 
   Future<void> fetchPlayerHistory() async {
-    var history = await SharedPreferencesHelper.getStringKeyPrefs(
+    var history = await SharedPreferencesHandler.getStringKeyPrefs(
         SharedPreferencesKeys.playerHistory
     );
 
@@ -30,12 +30,12 @@ abstract class _PlayerHistoryStore with Store {
     }
   }
 
-  Future<void> updatePlayerHistory(int? tries) async {
+  Future<void> updatePlayerHistory(int? attempts) async {
     var playerHistory = _playerHistory;
 
-    if (tries != null) {
+    if (attempts != null) {
       playerHistory.updateWins();
-      playerHistory.updateTries(tries);
+      playerHistory.updateAttempts(attempts);
       playerHistory.updateCurrentSequence();
       playerHistory.checkBestSequence();
     } else {
@@ -45,7 +45,7 @@ abstract class _PlayerHistoryStore with Store {
 
     _setPlayerHistory(playerHistory);
 
-    await SharedPreferencesHelper.saveStringPrefs(
+    await SharedPreferencesHandler.saveStringPrefs(
         SharedPreferencesKeys.playerHistory,
         jsonEncode(playerHistory)
     );

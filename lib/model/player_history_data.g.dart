@@ -12,7 +12,8 @@ PlayerHistoryData _$PlayerHistoryDataFromJson(Map<String, dynamic> json) =>
       defeats: json['defeats'] as int? ?? 0,
       currentSequence: json['currentSequence'] as int? ?? 0,
       bestSequence: json['bestSequence'] as int? ?? 0,
-      tries: (json['tries'] as List<dynamic>?)?.map((e) => e as int).toList(),
+      attempts:
+          (json['attempts'] as List<dynamic>?)?.map((e) => e as int).toList(),
     );
 
 Map<String, dynamic> _$PlayerHistoryDataToJson(PlayerHistoryData instance) =>
@@ -21,5 +22,5 @@ Map<String, dynamic> _$PlayerHistoryDataToJson(PlayerHistoryData instance) =>
       'defeats': instance.defeats,
       'currentSequence': instance.currentSequence,
       'bestSequence': instance.bestSequence,
-      'tries': instance.tries,
+      'attempts': instance.attempts,
     };

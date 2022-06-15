@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:five/animation/shake_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:five/model/letter_field.dart';
@@ -54,7 +55,7 @@ class _LetterBoxState extends State<LetterBox> {
             child: Observer(
               builder: (_) {
                 return ShakeAnim(
-                  key: letterField.key,
+                  key: ValueKey(Random()),
                   isShakeEnabled: _mainStore.playedLetters[widget.index].shake,
                   child: Text(
                     letterField.letter,

@@ -1,5 +1,3 @@
-import 'dart:math';
-import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import '../util/constant/app_colors.dart';
 
@@ -7,7 +5,6 @@ part 'letter_field.g.dart';
 
 @JsonSerializable()
 class LetterField {
-  ValueKey key = ValueKey(Random());
   String letter;
   int? background;
   int? borderColor;

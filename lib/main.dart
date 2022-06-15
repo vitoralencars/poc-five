@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:five/util/constant/analytics_events.dart';
 import 'package:five/util/constant/app_colors.dart';
+import 'package:five/util/handler/analytics_event_handler.dart';
 import 'package:five/widget/screen_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -12,7 +14,7 @@ import 'package:five/widget/error_screen.dart';
 import 'package:five/widget/grid_letter_boxes.dart';
 import 'package:five/widget/keyboard.dart';
 import 'package:five/widget/loading_lottie.dart';
-import 'package:five/view/player_history.dart';
+import 'package:five/widget/player_history.dart';
 import 'package:five/widget/tutorial_dialog.dart';
 import 'package:five/widget/warning_banner.dart';
 import 'di/service_locator.dart';
@@ -91,7 +93,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _setIsGuessingTriesFinishedDispose() {
-    _disposers.add(reaction((_) => _mainStore.isGuessingTriesFinished,
+    _disposers.add(reaction((_) => _mainStore.isGuessingAttemptsFinished,
       (isGuessingTriesFinished) {
         if (isGuessingTriesFinished != null &&
             isGuessingTriesFinished is bool &&
@@ -122,7 +124,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _handleTappedKey(String key) {
-    if (_mainStore.isGuessingTriesFinished) return;
+    if (_mainStore.isGuessingAttemptsFinished) return;
 
     switch(key.toLowerCase()) {
       case "back":
@@ -148,6 +150,11 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
+  void _onHistoryButtonPressed() {
+    AnalyticsEventsHandler.logEvent(AnalyticsEvents.historyPressed);
+    _showHistoryBottomSheet();
+  }
+
   void _showHistoryBottomSheet() {
     showModalBottomSheet<dynamic>(
       isScrollControlled: true,
@@ -160,13 +167,18 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _handleFinishedGuessingTries() async {
-    var tries = _mainStore.isWordGuessed ? _mainStore.tries : null;
+    var tries = _mainStore.isWordGuessed ? _mainStore.attempts : null;
 
     await _playerHistoryStore.updatePlayerHistory(tries);
 
     Future.delayed(const Duration(seconds: 2), () {
       _showHistoryBottomSheet();
     });
+  }
+
+  void _onTutorialButtonPressed() {
+    AnalyticsEventsHandler.logEvent(AnalyticsEvents.tutorialPressed);
+    _showTutorialDialog();
   }
 
   void _showTutorialDialog() {
@@ -216,50 +228,52 @@ class _MainPageState extends State<MainPage> {
           child: Center(
             child: Observer(
               builder: (_) {
-                return _mainStore.isLoading ? const LoadingScreen() : _mainStore.isError ?
-                ErrorScreen(onTryAgain: _fetchDailyWord) :
-                Column(
-                    children: <Widget>[
-                      ScreenHeader(
-                        onHistoryPressed: _showHistoryBottomSheet,
-                        onInstructionsPressed: _showTutorialDialog
-                      ),
-                      Visibility(
-                          visible: _mainStore.isFinishedDailyGame,
+                return _mainStore.isLoading ? const LoadingScreen() :
+                  _mainStore.isError ?
+                  ErrorScreen(onTryAgain: _fetchDailyWord) :
+                  Column(
+                      children: <Widget>[
+                        ScreenHeader(
+                          onHistoryPressed: _onHistoryButtonPressed,
+                          onInstructionsPressed: _onTutorialButtonPressed
+                        ),
+                        Visibility(
+                            visible: _mainStore.isFinishedDailyGame,
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 10),
+                                CountDownTimer(
+                                  timeRemaining: _mainStore.dailyWord
+                                      .nextWordRemainingTime,
+                                ),
+                              ],
+                            )
+                        ),
+                        Expanded(
                           child: Column(
-                            children: [
-                              const SizedBox(height: 10),
-                              CountDownTimer(
-                                timeRemaining: _mainStore.dailyWord.nextWordRemainingTime,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              WarningBanner(
+                                warning: _mainStore.warningType,
+                                rightWord: _mainStore.dailyWord.dailyWord,
                               ),
+                              const SizedBox(height: 30),
+                              Flexible(
+                                  child: GridLetterBoxes(
+                                    wordLength: 5,
+                                    lettersList: _mainStore.playedLetters,
+                                  )
+                              ),
+                              const SizedBox(height: 10),
+                              Keyboard(
+                                onKeyTapped: _handleTappedKey,
+                                keysRows: _mainStore.keyboardKeysList,
+                              )
                             ],
                           )
-                      ),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            WarningBanner(
-                              warning: _mainStore.warningType,
-                              rightWord: _mainStore.dailyWord.dailyWord,
-                            ),
-                            const SizedBox(height: 30),
-                            Flexible(
-                                child: GridLetterBoxes(
-                                  wordLength: 5,
-                                  lettersList: _mainStore.playedLetters,
-                                )
-                            ),
-                            const SizedBox(height: 10),
-                            Keyboard(
-                              onKeyTapped: _handleTappedKey,
-                              keysRows: _mainStore.keyboardKeysList,
-                            )
-                          ],
-                        )
-                    )
-                  ]
-                );
+                      )
+                    ]
+                  );
               },
             )
           ),

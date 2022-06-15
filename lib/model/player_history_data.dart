@@ -8,15 +8,15 @@ class PlayerHistoryData {
   int defeats;
   int currentSequence;
   int bestSequence;
-  List<int> tries;
+  List<int> attempts;
 
   PlayerHistoryData({
     this.wins = 0,
     this.defeats = 0,
     this.currentSequence = 0,
     this.bestSequence = 0,
-    List<int>? tries
-  }) : tries = tries ?? [0, 0, 0, 0, 0, 0];
+    List<int>? attempts
+  }) : attempts = attempts ?? [0, 0, 0, 0, 0, 0];
 
   int playedGames() => wins + defeats;
 
@@ -40,11 +40,10 @@ class PlayerHistoryData {
     }
   }
 
-  void updateTries(int tryNumber) => tries[tryNumber]++;
+  void updateAttempts(int tryNumber) => attempts[tryNumber]++;
 
   factory PlayerHistoryData.fromJson(Map<String, dynamic> json) =>
     _$PlayerHistoryDataFromJson(json);
 
   Map toJson() => _$PlayerHistoryDataToJson(this);
-
 }

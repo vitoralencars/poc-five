@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'package:five/util/constant/analytics_events.dart';
 import 'package:five/util/constant/number_values.dart';
+import 'package:five/util/handler/analytics_event_handler.dart';
 import 'package:mobx/mobx.dart';
 import 'package:five/model/daily_word.dart';
 import 'package:five/service/usecase/fetch_daily_word_usecase.dart';
 import 'package:five/util/handler/word_handler.dart';
 import 'package:five/util/constant/preferences_keys.dart';
-import 'package:five/util/shared_preferences_helper.dart';
+import 'package:five/util/handler/shared_preferences_handler.dart';
 import 'package:five/widget/warning_banner.dart';
 import '../di/service_locator.dart';
 import '../model/keyboard_key.dart';
@@ -34,10 +36,10 @@ abstract class _MainStore with Store {
   bool get isError => _isError;
 
   @observable
-  bool _isGuessingTriesFinished = false;
+  bool _isGuessingAttemptsFinished = false;
 
   @computed
-  bool get isGuessingTriesFinished => _isGuessingTriesFinished;
+  bool get isGuessingAttemptsFinished => _isGuessingAttemptsFinished;
 
   @observable
   bool _isFinishedDailyGame = false;
@@ -74,7 +76,7 @@ abstract class _MainStore with Store {
   int currentIndex = 0;
   int _maxIndex = 4;
   int _minIndex = 0;
-  int tries = 0;
+  int attempts = 0;
 
   @action
   _setLoadingVisible(bool isLoading) => _isLoading = isLoading;
@@ -83,12 +85,12 @@ abstract class _MainStore with Store {
   _setErrorStatus(isError) => _isError = isError;
 
   @action
-  _setIsGuessingTriesFinished(isGuessingTriesFinished) {
-    _isGuessingTriesFinished = isGuessingTriesFinished;
+  _setIsGuessingAttemptsFinished(isGuessingAttemptsFinished) {
+    _isGuessingAttemptsFinished = isGuessingAttemptsFinished;
 
-    SharedPreferencesHelper.saveBooleanPrefs(
+    SharedPreferencesHandler.saveBooleanPrefs(
         SharedPreferencesKeys.dailyGuessingFinished,
-        isGuessingTriesFinished
+        isGuessingAttemptsFinished
     );
   }
 
@@ -96,7 +98,7 @@ abstract class _MainStore with Store {
   _setIsFinishedDailyGame(isFinishedDailyGame) {
     _isFinishedDailyGame = isFinishedDailyGame;
 
-    SharedPreferencesHelper.saveBooleanPrefs(
+    SharedPreferencesHandler.saveBooleanPrefs(
       SharedPreferencesKeys.finishedDailyGame,
       isFinishedDailyGame
     );
@@ -176,7 +178,7 @@ abstract class _MainStore with Store {
   }
 
   Future<bool> _isAlreadyDailyPlayed() async {
-    String lastPlayedWord = await SharedPreferencesHelper.getStringKeyPrefs(
+    String lastPlayedWord = await SharedPreferencesHandler.getStringKeyPrefs(
         SharedPreferencesKeys.lastPlayedWord
     );
 
@@ -189,15 +191,15 @@ abstract class _MainStore with Store {
   }
 
   Future<void> _resetSharedPreferences() async {
-    await SharedPreferencesHelper.saveStringPrefs(
+    await SharedPreferencesHandler.saveStringPrefs(
         SharedPreferencesKeys.lastPlayedWord,
         dailyWord.dailyWord
     );
-    await SharedPreferencesHelper.saveStringPrefs(
-        SharedPreferencesKeys.triesList,
+    await SharedPreferencesHandler.saveStringPrefs(
+        SharedPreferencesKeys.attemptsList,
         ""
     );
-    await SharedPreferencesHelper.saveBooleanPrefs(
+    await SharedPreferencesHandler.saveBooleanPrefs(
         SharedPreferencesKeys.dailyGuessingFinished,
         false
     );
@@ -206,14 +208,14 @@ abstract class _MainStore with Store {
   }
 
   Future<void> _recoverLetterList() async {
-    var tries = await SharedPreferencesHelper.getStringKeyPrefs(
-        SharedPreferencesKeys.triesList
+    var attempts = await SharedPreferencesHandler.getStringKeyPrefs(
+        SharedPreferencesKeys.attemptsList
     );
 
-    if (tries.isNotEmpty) {
-      var triesList = jsonDecode(tries);
+    if (attempts.isNotEmpty) {
+      var attemptsList = jsonDecode(attempts);
 
-      var keys = await SharedPreferencesHelper.getStringKeyPrefs(
+      var keys = await SharedPreferencesHandler.getStringKeyPrefs(
         SharedPreferencesKeys.typedKeys
       );
 
@@ -222,7 +224,7 @@ abstract class _MainStore with Store {
       await _checkDailyGameIsFinished();
 
       if (!isFinishedDailyGame) {
-        currentIndex = await SharedPreferencesHelper.getIntKeyPrefs(
+        currentIndex = await SharedPreferencesHandler.getIntKeyPrefs(
             SharedPreferencesKeys.currentIndex
         );
         _updateIndexes();
@@ -234,14 +236,14 @@ abstract class _MainStore with Store {
         );
       }
 
-      _setPlayedLetters(ObservableList.of(List<LetterField>.from(triesList.map((e) =>
+      _setPlayedLetters(ObservableList.of(List<LetterField>.from(attemptsList.map((e) =>
         LetterField.fromJson(e))
       )));
     }
   }
 
   Future<void> _checkDailyGameIsFinished() async {
-    bool isFinishedDailyGame = await SharedPreferencesHelper.getBoolKeyPrefs(
+    bool isFinishedDailyGame = await SharedPreferencesHandler.getBoolKeyPrefs(
         SharedPreferencesKeys.finishedDailyGame
     );
     _setIsFinishedDailyGame(isFinishedDailyGame);
@@ -256,25 +258,26 @@ abstract class _MainStore with Store {
   }
 
   void _saveWordIsMissed(bool isWordMissed) async {
-    await SharedPreferencesHelper.saveBooleanPrefs(
+    await SharedPreferencesHandler.saveBooleanPrefs(
         SharedPreferencesKeys.wordMissed,
         isWordMissed
     );
   }
 
-  Future<bool> _isWordMissed() async => await SharedPreferencesHelper
+  Future<bool> _isWordMissed() async => await SharedPreferencesHandler
     .getBoolKeyPrefs(
       SharedPreferencesKeys.wordMissed
     );
 
   Future<void> _checkIsFirstTime() async {
-    bool isFirstTime = !await SharedPreferencesHelper.getBoolKeyPrefs(
+    bool isFirstTime = !await SharedPreferencesHandler.getBoolKeyPrefs(
         SharedPreferencesKeys.notFirstTime
     );
 
     if (isFirstTime) {
+      AnalyticsEventsHandler.logEvent(AnalyticsEvents.firstTimeUser);
       _setIsFirstTime(true);
-      SharedPreferencesHelper.saveBooleanPrefs(
+      SharedPreferencesHandler.saveBooleanPrefs(
           SharedPreferencesKeys.notFirstTime,
           true
       );
@@ -305,6 +308,17 @@ abstract class _MainStore with Store {
     _minIndex = currentIndex;
   }
 
+  void _logAttemptsAnalytics() {
+    AnalyticsEventsHandler.logEvent(
+      AnalyticsEvents.attemptNumber,
+      data: <String, dynamic> {
+        "daily_word": dailyWord.dailyWord,
+        "attempt_word": _getTyppedWord(),
+        "attempt_number": attempts
+      }
+    );
+  }
+
   void updateRowBorderColor() {
     for (int i = _minIndex; i <= _maxIndex; i++) {
       playedLetters[i] = LetterField.updateLetter("");
@@ -331,7 +345,8 @@ abstract class _MainStore with Store {
     var lastIndex = playedLetters.length - 1;
     var typpedWord = _getTyppedWord();
 
-    if (_maxIndex <= lastIndex && await _isValidWord()) {
+    if (_maxIndex <= lastIndex && _isValidWord()) {
+      _logAttemptsAnalytics();
       _setIsWordGuessed(await WordHandler.isWordCorrect(
         playedLetters,
         keyboardKeysList,
@@ -343,24 +358,24 @@ abstract class _MainStore with Store {
         if (_maxIndex < lastIndex) {
           currentIndex++;
           _updateIndexes();
-          tries++;
+          attempts++;
           updateRowBorderColor();
         } else {
-          _handleFinishedTries();
+          _handleFinishedAttempts();
         }
       } else {
-        _handleFinishedTries();
+        _handleFinishedAttempts();
       }
 
-      SharedPreferencesHelper.saveStringPrefs(
+      SharedPreferencesHandler.saveStringPrefs(
           SharedPreferencesKeys.typedKeys,
           jsonEncode(keyboardKeysList)
       );
-      SharedPreferencesHelper.saveStringPrefs(
-          SharedPreferencesKeys.triesList,
+      SharedPreferencesHandler.saveStringPrefs(
+          SharedPreferencesKeys.attemptsList,
           jsonEncode(playedLetters)
       );
-      SharedPreferencesHelper.saveIntPrefs(
+      SharedPreferencesHandler.saveIntPrefs(
           SharedPreferencesKeys.currentIndex,
           currentIndex
       );
@@ -393,15 +408,28 @@ abstract class _MainStore with Store {
     _setPlayedLetters(playedLetters);
   }
 
-  void _handleFinishedTries() {
+  void _handleFinishedAttempts() {
     if (!isWordGuessed) {
       _setWarningType(WarningType.wrongWord);
+      AnalyticsEventsHandler.logEvent(
+          AnalyticsEvents.missedWord,
+          data: <String, String> {
+            "daily_word": dailyWord.dailyWord,
+          }
+      );
     } else {
       _setWarningType(WarningType.rightWord);
+      AnalyticsEventsHandler.logEvent(
+          AnalyticsEvents.rightWord,
+          data: <String, dynamic> {
+            "daily_word": dailyWord.dailyWord,
+            "attempts": attempts
+          }
+      );
     }
 
     _saveWordIsMissed(!isWordGuessed);
-    _setIsGuessingTriesFinished(true);
+    _setIsGuessingAttemptsFinished(true);
     _setIsFinishedDailyGame(true);
   }
 }

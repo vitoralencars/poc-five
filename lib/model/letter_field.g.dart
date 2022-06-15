@@ -10,11 +10,12 @@ LetterField _$LetterFieldFromJson(Map<String, dynamic> json) => LetterField(
       letter: json['letter'] as String,
       background: json['background'] as int?,
       borderColor: json['borderColor'] as int?,
-    );
+    )..shake = json['shake'] as bool;
 
 Map<String, dynamic> _$LetterFieldToJson(LetterField instance) =>
     <String, dynamic>{
       'letter': instance.letter,
       'background': instance.background,
       'borderColor': instance.borderColor,
+      'shake': instance.shake,
     };

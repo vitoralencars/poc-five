@@ -58,7 +58,7 @@ class _PlayerHistoryState extends State<PlayerHistory> {
                       fontWeight: FontWeight.bold
                     ),
                   ),
-                  _buildTriesChart(_store.playerHistory),
+                  _buildAttemptsChart(_store.playerHistory),
                 ],
               );
             },
@@ -156,11 +156,11 @@ class _PlayerHistoryState extends State<PlayerHistory> {
     );
   }
 
-  Widget _buildTriesChart(PlayerHistoryData data) {
-    var tries = List<int>.from(data.tries.reversed);
-    tries.insert(0, data.defeats);
+  Widget _buildAttemptsChart(PlayerHistoryData data) {
+    var attempts = List<int>.from(data.attempts.reversed);
+    attempts.insert(0, data.defeats);
 
-    var maxTriesValue = tries.reduce(max);
+    var maxAttemptsValue = attempts.reduce(max);
 
     return SfCartesianChart(
       plotAreaBorderWidth: 0,
@@ -179,14 +179,14 @@ class _PlayerHistoryState extends State<PlayerHistory> {
       ),
       primaryYAxis: NumericAxis(
         minimum: 0,
-        maximum: (maxTriesValue + 5).toDouble(),
+        maximum: (maxAttemptsValue + 5).toDouble(),
         interval: 1,
         isVisible: false,
       ),
       series: <ChartSeries<int, String>>[
         BarSeries<int, String>(
-          dataSource: tries,
-          xValueMapper: (_, index) => _getXValueMapper(index, tries.length),
+          dataSource: attempts,
+          xValueMapper: (_, index) => _getXValueMapper(index, attempts.length),
           yValueMapper: (int value, _) => value,
           width: 0.5,
           borderRadius: const BorderRadius.horizontal(right: Radius.circular(5)),
@@ -204,7 +204,7 @@ class _PlayerHistoryState extends State<PlayerHistory> {
     );
   }
 
-  String _getXValueMapper(int index, triesLength) {
-    return index > 0 ? ((index - triesLength).abs()).toString() : "#";
+  String _getXValueMapper(int index, attemptsLength) {
+    return index > 0 ? ((index - attemptsLength).abs()).toString() : "#";
   }
 }

@@ -86,12 +86,16 @@ class TutorialDialog extends StatelessWidget {
       _buildRichTextExplanation([
         _buildNormalTextSpan("- a letra "),
         _buildHighlightedText(" A ", AppColors.rightLetterPosition),
-        _buildNormalTextSpan(" existe na palavra diária e está posicionada corretamente;"),
+        _buildNormalTextSpan(
+          " existe na palavra diária e está posicionada corretamente;"
+        ),
       ]),
       _buildRichTextExplanation([
         _buildNormalTextSpan("- a letra "),
         _buildHighlightedText(" O ", AppColors.wrongLetterPosition),
-        _buildNormalTextSpan(" existe na palavra diária, porém está fora de posição;"),
+        _buildNormalTextSpan(
+          " existe na palavra diária, porém está fora de posição;"
+        ),
       ]),
       _buildRichTextExplanation([
         _buildNormalTextSpan("- as letras "),
@@ -105,7 +109,12 @@ class TutorialDialog extends StatelessWidget {
       const SizedBox(height: 10),
       _buildTextExplanationTitle("Observações:"),
       const SizedBox(height: 4),
-      _buildTextExplanation("- não serão aceitas palavras inexistentes;\n- acentos são preenchidos automaticamente ao finalizar a tentativa;\n- letras podem se repetir;\n- nomes próprios não são considerados palavras."),
+      _buildTextExplanation(
+        "- não serão aceitas palavras inexistentes;\n- acentos são "
+        "preenchidos automaticamente ao finalizar a tentativa;\n- "
+        "letras podem se repetir;\n- nomes próprios não são considerados "
+        "palavras."
+      ),
     ];
   }
 

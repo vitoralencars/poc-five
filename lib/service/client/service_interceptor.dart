@@ -1,25 +1,23 @@
 import 'package:dio/dio.dart';
+import 'package:five/util/constant/analytics_events.dart';
+import 'package:five/util/handler/analytics_event_handler.dart';
 
 class ServiceInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    print('REQUEST[${options.method}] => PATH: ${options.path}');
+    AnalyticsEventsHandler.logEvent(AnalyticsEvents.fetchDailyWordRequested);
     return super.onRequest(options, handler);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    print(
-      'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}',
-    );
+    AnalyticsEventsHandler.logEvent(AnalyticsEvents.fetchDailyWordSuccess);
     return super.onResponse(response, handler);
   }
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
-    print(
-      'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}',
-    );
+    AnalyticsEventsHandler.logEvent(AnalyticsEvents.fetchDailyWordError);
     return super.onError(err, handler);
   }
 }
