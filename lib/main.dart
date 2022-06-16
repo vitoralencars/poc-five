@@ -124,7 +124,10 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _handleTappedKey(String key) {
-    if (_mainStore.isGuessingAttemptsFinished) return;
+    if (
+      _mainStore.isGuessingAttemptsFinished ||
+      _mainStore.isFinishedDailyGame
+    ) return;
 
     switch(key.toLowerCase()) {
       case "back":
