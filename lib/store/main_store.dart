@@ -60,6 +60,18 @@ abstract class _MainStore with Store {
   bool get isFirstTime => _isFirstTime;
 
   @observable
+  bool _isWordGuessed = false;
+
+  @computed
+  bool get isWordGuessed => _isWordGuessed;
+
+  @observable
+  int _attempts = 0;
+
+  @computed
+  int get attempts => _attempts;
+
+  @observable
   WarningType _warningType = WarningType.hiddenState;
 
   @computed
@@ -72,11 +84,9 @@ abstract class _MainStore with Store {
       LetterField.emptyState())
   );
 
-  bool isWordGuessed = false;
-  int currentIndex = 0;
+  int _currentIndex = 0;
   int _maxIndex = 4;
   int _minIndex = 0;
-  int attempts = 0;
 
   @action
   _setLoadingVisible(bool isLoading) => _isLoading = isLoading;
@@ -89,8 +99,8 @@ abstract class _MainStore with Store {
     _isGuessingAttemptsFinished = isGuessingAttemptsFinished;
 
     SharedPreferencesHandler.saveBooleanPrefs(
-        SharedPreferencesKeys.dailyGuessingFinished,
-        isGuessingAttemptsFinished
+      SharedPreferencesKeys.dailyGuessingFinished,
+      isGuessingAttemptsFinished
     );
   }
 
@@ -111,7 +121,10 @@ abstract class _MainStore with Store {
   _setIsFirstTime(bool isFirstTime) => _isFirstTime = isFirstTime;
 
   @action
-  _setIsWordGuessed(bool isWordGuessed) => this.isWordGuessed = isWordGuessed;
+  _setIsWordGuessed(bool isWordGuessed) => _isWordGuessed = isWordGuessed;
+
+  @action
+  _setAttempts(int attempts) => _attempts = attempts;
 
   @action
   _setWarningType(WarningType warningType) {
@@ -179,7 +192,7 @@ abstract class _MainStore with Store {
 
   Future<bool> _isAlreadyDailyPlayed() async {
     String lastPlayedWord = await SharedPreferencesHandler.getStringKeyPrefs(
-        SharedPreferencesKeys.lastPlayedWord
+      SharedPreferencesKeys.lastPlayedWord
     );
 
     if (lastPlayedWord != dailyWord.dailyWord) {
@@ -192,28 +205,29 @@ abstract class _MainStore with Store {
 
   Future<void> _resetSharedPreferences() async {
     await SharedPreferencesHandler.saveStringPrefs(
-        SharedPreferencesKeys.lastPlayedWord,
-        dailyWord.dailyWord
+      SharedPreferencesKeys.lastPlayedWord,
+      dailyWord.dailyWord
     );
     await SharedPreferencesHandler.saveStringPrefs(
-        SharedPreferencesKeys.attemptsList,
-        ""
+      SharedPreferencesKeys.attemptsList,
+      ""
     );
     await SharedPreferencesHandler.saveBooleanPrefs(
-        SharedPreferencesKeys.dailyGuessingFinished,
-        false
+      SharedPreferencesKeys.dailyGuessingFinished,
+      false
     );
 
     _saveWordIsMissed(false);
+    _setIsFinishedDailyGame(false);
   }
 
   Future<void> _recoverLetterList() async {
-    var attempts = await SharedPreferencesHandler.getStringKeyPrefs(
+    var storedAttempts = await SharedPreferencesHandler.getStringKeyPrefs(
         SharedPreferencesKeys.attemptsList
     );
 
-    if (attempts.isNotEmpty) {
-      var attemptsList = jsonDecode(attempts);
+    if (storedAttempts.isNotEmpty) {
+      var attemptsList = jsonDecode(storedAttempts);
 
       var keys = await SharedPreferencesHandler.getStringKeyPrefs(
         SharedPreferencesKeys.typedKeys
@@ -224,10 +238,11 @@ abstract class _MainStore with Store {
       await _checkDailyGameIsFinished();
 
       if (!isFinishedDailyGame) {
-        currentIndex = await SharedPreferencesHandler.getIntKeyPrefs(
+        _currentIndex = await SharedPreferencesHandler.getIntKeyPrefs(
             SharedPreferencesKeys.currentIndex
         );
         _updateIndexes();
+        _setAttempts(_currentIndex~/5);
       }
 
       for (int i = 0; i < keyboardKeysList.length; i++) {
@@ -259,8 +274,8 @@ abstract class _MainStore with Store {
 
   void _saveWordIsMissed(bool isWordMissed) async {
     await SharedPreferencesHandler.saveBooleanPrefs(
-        SharedPreferencesKeys.wordMissed,
-        isWordMissed
+      SharedPreferencesKeys.wordMissed,
+      isWordMissed
     );
   }
 
@@ -304,8 +319,8 @@ abstract class _MainStore with Store {
   }
 
   void _updateIndexes() {
-    _maxIndex = currentIndex + 4;
-    _minIndex = currentIndex;
+    _maxIndex = _currentIndex + 4;
+    _minIndex = _currentIndex;
   }
 
   void _logAttemptsAnalytics() {
@@ -329,17 +344,17 @@ abstract class _MainStore with Store {
   void eraseLetter() {
     if (!isWordGuessed) {
       if (_isCurrentIndexLastIndexEmpty() || _isCurrentIndexBetweenMinMax()) {
-        currentIndex--;
+        _currentIndex--;
       }
       _updateLettersList("");
     }
   }
 
   bool _isCurrentIndexBetweenMinMax() =>
-      currentIndex > _minIndex && currentIndex < _maxIndex;
+      _currentIndex > _minIndex && _currentIndex < _maxIndex;
 
-  bool _isCurrentIndexLastIndexEmpty() => currentIndex == _maxIndex &&
-      playedLetters[currentIndex].letter.isEmpty;
+  bool _isCurrentIndexLastIndexEmpty() => _currentIndex == _maxIndex &&
+      playedLetters[_currentIndex].letter.isEmpty;
 
   Future<void> enterWord() async {
     var lastIndex = playedLetters.length - 1;
@@ -356,9 +371,9 @@ abstract class _MainStore with Store {
       ));
       if (!isWordGuessed) {
         if (_maxIndex < lastIndex) {
-          currentIndex++;
+          _currentIndex++;
           _updateIndexes();
-          attempts++;
+          _setAttempts(attempts + 1);
           updateRowBorderColor();
         } else {
           _handleFinishedAttempts();
@@ -377,7 +392,7 @@ abstract class _MainStore with Store {
       );
       SharedPreferencesHandler.saveIntPrefs(
           SharedPreferencesKeys.currentIndex,
-          currentIndex
+          _currentIndex
       );
     }
   }
@@ -393,18 +408,18 @@ abstract class _MainStore with Store {
   }
 
   void setLetter(String letter) {
-    if (currentIndex < _maxIndex) {
+    if (_currentIndex < _maxIndex) {
       _updateLettersList(letter);
-      currentIndex++;
+      _currentIndex++;
     } else {
-      if (playedLetters[currentIndex].letter.isEmpty) {
+      if (playedLetters[_currentIndex].letter.isEmpty) {
         _updateLettersList(letter);
       }
     }
   }
 
   void _updateLettersList(String letter) {
-    playedLetters[currentIndex] = LetterField.updateLetter(letter);
+    playedLetters[_currentIndex] = LetterField.updateLetter(letter);
     _setPlayedLetters(playedLetters);
   }
 

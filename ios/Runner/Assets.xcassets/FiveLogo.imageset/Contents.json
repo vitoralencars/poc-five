@@ -11,14 +11,16 @@
       "scale" : "2x"
     },
     {
-      "compression-type" : "automatic",
       "filename" : "five_logo.pdf",
       "idiom" : "universal",
       "scale" : "3x"
     }
   ],
   "info" : {
-    "author" : "xcode",
+    "author" : "daybyday",
     "version" : 1
+  },
+  "properties" : {
+    "auto-scaling" : "auto"
   }
 }

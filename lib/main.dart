@@ -87,19 +87,19 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _setDisposers() {
-    _setIsGuessingTriesFinishedDispose();
+    _setIsGuessingAttemptsFinishedDispose();
     _setWarningBannerDispose();
     _setIsFirstTimeDispose();
   }
 
-  void _setIsGuessingTriesFinishedDispose() {
+  void _setIsGuessingAttemptsFinishedDispose() {
     _disposers.add(reaction((_) => _mainStore.isGuessingAttemptsFinished,
-      (isGuessingTriesFinished) {
-        if (isGuessingTriesFinished != null &&
-            isGuessingTriesFinished is bool &&
-            isGuessingTriesFinished
+      (isGuessingAttemptsFinished) {
+        if (isGuessingAttemptsFinished != null &&
+            isGuessingAttemptsFinished is bool &&
+            isGuessingAttemptsFinished
         ) {
-          _handleFinishedGuessingTries();
+          _handleFinishedGuessingAttempts();
         }
       }
     ));
@@ -166,10 +166,10 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  void _handleFinishedGuessingTries() async {
-    var tries = _mainStore.isWordGuessed ? _mainStore.attempts : null;
+  void _handleFinishedGuessingAttempts() async {
+    var attempts = _mainStore.isWordGuessed ? _mainStore.attempts : null;
 
-    await _playerHistoryStore.updatePlayerHistory(tries);
+    await _playerHistoryStore.updatePlayerHistory(attempts);
 
     Future.delayed(const Duration(seconds: 2), () {
       _showHistoryBottomSheet();
