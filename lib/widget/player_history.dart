@@ -20,15 +20,7 @@ class _PlayerHistoryState extends State<PlayerHistory> {
   final _store = serviceLocator<PlayerHistoryStore>();
 
   @override
-  initState() {
-    super.initState();
-    _store.fetchPlayerHistory();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    //var data = widget.historyData;
-
     return Wrap(
       children: [
         Container(

@@ -22,7 +22,7 @@ abstract class _PlayerHistoryStore with Store {
 
   Future<void> fetchPlayerHistory() async {
     var history = await SharedPreferencesHandler.getStringKeyPrefs(
-        SharedPreferencesKeys.playerHistory
+      SharedPreferencesKeys.playerHistory
     );
 
     if (history.isNotEmpty) {
@@ -46,8 +46,8 @@ abstract class _PlayerHistoryStore with Store {
     _setPlayerHistory(playerHistory);
 
     await SharedPreferencesHandler.saveStringPrefs(
-        SharedPreferencesKeys.playerHistory,
-        jsonEncode(playerHistory)
+      SharedPreferencesKeys.playerHistory,
+      jsonEncode(playerHistory)
     );
   }
 }

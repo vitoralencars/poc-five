@@ -67,6 +67,7 @@ class _MainPageState extends State<MainPage> {
     super.initState();
     _setDisposers();
     _fetchDailyWord();
+    _fetchPlayerHistory();
     _updateRowBorderColor();
   }
 
@@ -80,6 +81,10 @@ class _MainPageState extends State<MainPage> {
 
   void _fetchDailyWord() async {
     await _mainStore.fetchDailyWord();
+  }
+
+  void _fetchPlayerHistory() async {
+    await _playerHistoryStore.fetchPlayerHistory();
   }
 
   void _updateRowBorderColor() {

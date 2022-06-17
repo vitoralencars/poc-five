@@ -20,7 +20,12 @@ class LetterField {
 
   LetterField.updateLetter(this.letter) {
     background = AppColors.selectedRowLetterBoxBackground;
-    borderColor = AppColors.selectedRowBorder;
+    borderColor = AppColors.selectedRowLetterBoxBackground;
+  }
+
+  LetterField.updateLetter2(this.letter) {
+    background = AppColors.selectedRowLetterBoxBackground;
+    borderColor = AppColors.noLetter;
   }
 
   factory LetterField.emptyState() => LetterField(

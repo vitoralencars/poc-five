@@ -239,7 +239,7 @@ abstract class _MainStore with Store {
 
       if (!isFinishedDailyGame) {
         _currentIndex = await SharedPreferencesHandler.getIntKeyPrefs(
-            SharedPreferencesKeys.currentIndex
+          SharedPreferencesKeys.currentIndex
         );
         _updateIndexes();
         _setAttempts(_currentIndex~/5);
@@ -383,16 +383,16 @@ abstract class _MainStore with Store {
       }
 
       SharedPreferencesHandler.saveStringPrefs(
-          SharedPreferencesKeys.typedKeys,
-          jsonEncode(keyboardKeysList)
+        SharedPreferencesKeys.typedKeys,
+        jsonEncode(keyboardKeysList)
       );
       SharedPreferencesHandler.saveStringPrefs(
-          SharedPreferencesKeys.attemptsList,
-          jsonEncode(playedLetters)
+        SharedPreferencesKeys.attemptsList,
+        jsonEncode(playedLetters)
       );
       SharedPreferencesHandler.saveIntPrefs(
-          SharedPreferencesKeys.currentIndex,
-          _currentIndex
+        SharedPreferencesKeys.currentIndex,
+        _currentIndex
       );
     }
   }

@@ -115,7 +115,7 @@ class WordHandler {
       return WordValidation.incompleteWord;
     }
 
-    if (!_validWords.contains(typpedWord.toLowerCase())) {
+    if (!_validWordsNoDiactrics.contains(typpedWord.toLowerCase())) {
       return WordValidation.invalidWord;
     }
 
