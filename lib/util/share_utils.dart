@@ -38,6 +38,7 @@ class ShareUtils {
   static Widget _getSharingScreen(List<LetterField> playedLetters) {
     return Container(
       color: Color(AppColors.homeBackground),
+      padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
