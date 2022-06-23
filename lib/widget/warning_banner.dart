@@ -6,11 +6,13 @@ class WarningBanner extends StatelessWidget {
   const WarningBanner({
     Key? key,
     required this.warning,
-    required this.rightWord
+    required this.rightWord,
+    required this.onSharedButtonPressed
   }) : super(key: key);
 
   final WarningType? warning;
   final String rightWord;
+  final VoidCallback onSharedButtonPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +29,36 @@ class WarningBanner extends StatelessWidget {
             color: warningBanner.backgroundColor,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Text(
-            warningBanner.message,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18
-            ),
-          ),
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text(
+                warningBanner.message,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18
+                ),
+              ),
+              Visibility(
+                visible: _isGuessingAttemptsFinished(warning),
+                child: IconButton(
+                  onPressed: onSharedButtonPressed,
+                  padding: const EdgeInsets.fromLTRB(4, 4, 4, 4),
+                  constraints: const BoxConstraints(),
+                  icon: const Icon(Icons.share),
+                  color: Colors.white,
+                )
+              )
+            ],
+          )
         ),
       ),
     );
+  }
+
+  bool _isGuessingAttemptsFinished(WarningType? warning) {
+    return warning == WarningType.rightWord || warning == WarningType.wrongWord;
   }
 
   Warning _getWarning(String rightWord) {

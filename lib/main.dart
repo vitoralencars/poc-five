@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:five/util/constant/analytics_events.dart';
 import 'package:five/util/constant/app_colors.dart';
 import 'package:five/util/handler/analytics_event_handler.dart';
+import 'package:five/util/share_utils.dart';
 import 'package:five/widget/screen_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -226,6 +227,23 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
+  void _onSharedButtonPressed() {
+    bool isWordGuessed = _mainStore.isWordGuessed;
+
+    AnalyticsEventsHandler.logEvent(
+      AnalyticsEvents.historyPressed,
+      data: <String, dynamic> {
+        "is_word_guessed": isWordGuessed
+      }
+    );
+
+    ShareUtils.shareResult(
+      isWordGuessed,
+      _mainStore.attempts + 1,
+      _mainStore.playedLetters
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -246,16 +264,16 @@ class _MainPageState extends State<MainPage> {
                           onInstructionsPressed: _onTutorialButtonPressed
                         ),
                         Visibility(
-                            visible: _mainStore.isFinishedDailyGame,
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 10),
-                                CountDownTimer(
-                                  timeRemaining: _mainStore.dailyWord
-                                      .nextWordRemainingTime,
-                                ),
-                              ],
-                            )
+                          visible: _mainStore.isFinishedDailyGame,
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 10),
+                              CountDownTimer(
+                                timeRemaining: _mainStore.dailyWord
+                                    .nextWordRemainingTime,
+                              ),
+                            ],
+                          )
                         ),
                         Expanded(
                           child: Column(
@@ -264,13 +282,14 @@ class _MainPageState extends State<MainPage> {
                               WarningBanner(
                                 warning: _mainStore.warningType,
                                 rightWord: _mainStore.dailyWord.dailyWord,
+                                onSharedButtonPressed: _onSharedButtonPressed,
                               ),
                               const SizedBox(height: 30),
                               Flexible(
-                                  child: GridLetterBoxes(
-                                    wordLength: 5,
-                                    lettersList: _mainStore.playedLetters,
-                                  )
+                                child: GridLetterBoxes(
+                                  wordLength: 5,
+                                  lettersList: _mainStore.playedLetters,
+                                )
                               ),
                               const SizedBox(height: 10),
                               Keyboard(

@@ -237,13 +237,15 @@ abstract class _MainStore with Store {
 
       await _checkDailyGameIsFinished();
 
-      if (!isFinishedDailyGame) {
-        _currentIndex = await SharedPreferencesHandler.getIntKeyPrefs(
+      int savedIndex = await SharedPreferencesHandler.getIntKeyPrefs(
           SharedPreferencesKeys.currentIndex
-        );
+      );
+      if (!isFinishedDailyGame) {
+        _currentIndex = savedIndex;
         _updateIndexes();
-        _setAttempts(_currentIndex~/5);
       }
+
+      _setAttempts(savedIndex~/5);
 
       for (int i = 0; i < keyboardKeysList.length; i++) {
         keyboardKeysList[i] = List<KeyboardKey>.from(
@@ -267,6 +269,7 @@ abstract class _MainStore with Store {
       if (await _isWordMissed()) {
         _setWarningType(WarningType.wrongWord);
       } else {
+        _setIsWordGuessed(true);
         _setWarningType(WarningType.rightWord);
       }
     }

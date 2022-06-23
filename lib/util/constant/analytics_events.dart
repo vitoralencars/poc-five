@@ -8,6 +8,7 @@ class AnalyticsEvents {
   //BUTTONS
   static const String tutorialPressed = "tutorial_pressed";
   static const String historyPressed = "history_pressed";
+  static const String sharePressed = "shared_pressed";
 
   //SERVICE
   static const String fetchDailyWordRequested = "fetch_daily_word_requested";

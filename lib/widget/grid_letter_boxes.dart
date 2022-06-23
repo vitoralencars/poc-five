@@ -6,12 +6,14 @@ import '../util/constant/app_colors.dart';
 class GridLetterBoxes extends StatefulWidget {
   const GridLetterBoxes({
     Key? key,
+    this.hideLetters = false,
     required this.wordLength,
     required this.lettersList
   }) : super(key: key);
 
   final int wordLength;
   final List<LetterField> lettersList;
+  final bool hideLetters;
 
   @override
   State<GridLetterBoxes> createState() => _GridLetterBoxesState();
@@ -32,6 +34,7 @@ class _GridLetterBoxesState extends State<GridLetterBoxes> {
         childAspectRatio: 1,
         children: widget.lettersList.map((letterField) {
           return LetterBox(
+            hideLetter: widget.hideLetters,
             letterField: letterField,
             index: widget.lettersList.indexOf(letterField)
           );

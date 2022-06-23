@@ -10,12 +10,14 @@ import '../store/main_store.dart';
 class LetterBox extends StatefulWidget {
   const LetterBox({
     Key? key,
+    this.hideLetter = false,
     required this.letterField,
     required this.index,
   }) : super(key: key);
 
   final LetterField letterField;
   final int index;
+  final bool hideLetter;
 
   @override
   State<LetterBox> createState() => _LetterBoxState();
@@ -57,13 +59,16 @@ class _LetterBoxState extends State<LetterBox> {
                 return ShakeAnim(
                   key: ValueKey(Random()),
                   isShakeEnabled: _mainStore.playedLetters[widget.index].shake,
-                  child: Text(
-                    letterField.letter,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold
-                    )
+                  child: Visibility(
+                    visible: !widget.hideLetter,
+                    child: Text(
+                      letterField.letter,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold
+                      )
+                    ),
                   ),
                 );
               },
