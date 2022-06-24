@@ -56,20 +56,5 @@ class ShareUtils {
         ],
       ),
     );
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SvgPicture.asset(
-          'assets/images/five_logo.svg',
-          height: 30,
-          alignment: Alignment.center,
-        ),
-        GridLetterBoxes(
-          hideLetters: true,
-          wordLength: 5,
-          lettersList: playedLetters,
-        )
-      ],
-    );
   }
 }
