@@ -7,13 +7,15 @@ class GridLetterBoxes extends StatefulWidget {
   const GridLetterBoxes({
     Key? key,
     this.hideLetters = false,
+    this.onBoxTapped,
     required this.wordLength,
     required this.lettersList
   }) : super(key: key);
 
+  final bool hideLetters;
+  final Function(int)? onBoxTapped;
   final int wordLength;
   final List<LetterField> lettersList;
-  final bool hideLetters;
 
   @override
   State<GridLetterBoxes> createState() => _GridLetterBoxesState();
@@ -32,13 +34,23 @@ class _GridLetterBoxesState extends State<GridLetterBoxes> {
         mainAxisSpacing: 0,
         crossAxisCount: widget.wordLength,
         childAspectRatio: 1,
-        children: widget.lettersList.map((letterField) {
+        children: widget.lettersList.asMap().map((index, letterField) => MapEntry(
+          index,
+          LetterBox(
+            hideLetter: widget.hideLetters,
+            letterField: letterField,
+            index: index,
+            onTapped: widget.onBoxTapped,
+          )
+        )).values.toList(),
+        /*children: widget.lettersList.map((letterField) {
           return LetterBox(
             hideLetter: widget.hideLetters,
             letterField: letterField,
-            index: widget.lettersList.indexOf(letterField)
+            index: widget.lettersList.indexOf(letterField),
+            onTapped: widget.onBoxTapped,
           );
-        }).toList()
+        }).toList()*/
       )
     );
   }

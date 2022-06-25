@@ -338,8 +338,23 @@ abstract class _MainStore with Store {
   }
 
   void updateRowBorderColor() {
-    for (int i = _minIndex; i <= _maxIndex; i++) {
+    playedLetters[_minIndex] = LetterField.selectField("");
+    for (int i = _minIndex + 1; i <= _maxIndex; i++) {
       playedLetters[i] = LetterField.updateLetter("");
+      _setPlayedLetters(playedLetters);
+    }
+  }
+
+  void selectBox(int boxIndex) {
+    if (boxIndex >= _minIndex && boxIndex <= _maxIndex) {
+      playedLetters[_currentIndex] = LetterField.updateLetter(
+          playedLetters[_currentIndex].letter
+      );
+      _currentIndex = boxIndex;
+      playedLetters[_currentIndex] = LetterField.selectField(
+          playedLetters[_currentIndex].letter
+      );
+
       _setPlayedLetters(playedLetters);
     }
   }
@@ -349,7 +364,7 @@ abstract class _MainStore with Store {
       if (_isCurrentIndexLastIndexEmpty() || _isCurrentIndexBetweenMinMax()) {
         _currentIndex--;
       }
-      _updateLettersList("");
+      _eraseLetter();
     }
   }
 
@@ -374,7 +389,7 @@ abstract class _MainStore with Store {
       ));
       if (!isWordGuessed) {
         if (_maxIndex < lastIndex) {
-          _currentIndex++;
+          _currentIndex = _maxIndex + 1;
           _updateIndexes();
           _setAttempts(attempts + 1);
           updateRowBorderColor();
@@ -412,17 +427,35 @@ abstract class _MainStore with Store {
 
   void setLetter(String letter) {
     if (_currentIndex < _maxIndex) {
-      _updateLettersList(letter);
+      _setLetter(letter);
       _currentIndex++;
     } else {
       if (playedLetters[_currentIndex].letter.isEmpty) {
-        _updateLettersList(letter);
+        _setLetter(letter);
       }
     }
   }
 
-  void _updateLettersList(String letter) {
-    playedLetters[_currentIndex] = LetterField.updateLetter(letter);
+  void _setLetter(String letter) {
+    if (_currentIndex < _maxIndex) {
+      playedLetters[_currentIndex] = LetterField.updateLetter(letter);
+      playedLetters[_currentIndex + 1] = LetterField.selectField(
+        playedLetters[_currentIndex + 1].letter
+      );
+    } else {
+      playedLetters[_currentIndex] = LetterField.selectField(letter);
+    }
+
+    _setPlayedLetters(playedLetters);
+  }
+
+  void _eraseLetter() {
+    if (_currentIndex < _maxIndex) {
+      playedLetters[_currentIndex + 1] = LetterField.updateLetter("");
+    }
+
+    playedLetters[_currentIndex] = LetterField.selectField("");
+
     _setPlayedLetters(playedLetters);
   }
 

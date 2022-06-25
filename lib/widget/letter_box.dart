@@ -11,13 +11,15 @@ class LetterBox extends StatefulWidget {
   const LetterBox({
     Key? key,
     this.hideLetter = false,
+    this.onTapped,
     required this.letterField,
     required this.index,
   }) : super(key: key);
 
+  final bool hideLetter;
+  final Function(int)? onTapped;
   final LetterField letterField;
   final int index;
-  final bool hideLetter;
 
   @override
   State<LetterBox> createState() => _LetterBoxState();
@@ -31,14 +33,16 @@ class _LetterBoxState extends State<LetterBox> {
     LetterField letterField = widget.letterField;
 
     return Center(
+      child: GestureDetector(
+        onTap: () => widget.onTapped?.call(widget.index),
         child: Card(
           shape: RoundedRectangleBorder(
             side: BorderSide(
               color: Color(
                 letterField.borderColor ??
-                AppColors.transparent
+                  AppColors.transparent
               ),
-              width: 2
+                width: 2
             ),
             borderRadius: BorderRadius.circular(8)
           ),
@@ -50,7 +54,7 @@ class _LetterBoxState extends State<LetterBox> {
             decoration: BoxDecoration(
               color: Color(
                 letterField.background ??
-                AppColors.letterBoxDefaultBackground
+                    AppColors.letterBoxDefaultBackground
               ),
               borderRadius: BorderRadius.circular(8),
             ),
@@ -75,6 +79,7 @@ class _LetterBoxState extends State<LetterBox> {
             )
           ),
         )
+      )
     );
   }
 }

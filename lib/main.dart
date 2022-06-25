@@ -164,6 +164,10 @@ class _MainPageState extends State<MainPage> {
     _showHistoryBottomSheet();
   }
 
+  void _onLetterBoxTapped(int boxIndex) {
+    _mainStore.selectBox(boxIndex);
+  }
+
   void _showHistoryBottomSheet() {
     showModalBottomSheet<dynamic>(
       isScrollControlled: true,
@@ -289,6 +293,7 @@ class _MainPageState extends State<MainPage> {
                                 child: GridLetterBoxes(
                                   wordLength: 5,
                                   lettersList: _mainStore.playedLetters,
+                                  onBoxTapped: _onLetterBoxTapped,
                                 )
                               ),
                               const SizedBox(height: 10),
