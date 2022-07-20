@@ -361,18 +361,20 @@ abstract class _MainStore with Store {
 
   void eraseLetter() {
     if (!isWordGuessed) {
-      if (_isCurrentIndexLastIndexEmpty() || _isCurrentIndexBetweenMinMax()) {
+      var changeSelected = _isCurrentIndexEmpty() &&
+          _isCurrentIndexBiggerThanMin();
+
+      if (changeSelected) {
         _currentIndex--;
       }
-      _eraseLetter();
+
+      _eraseLetter(changeSelected);
     }
   }
 
-  bool _isCurrentIndexBetweenMinMax() =>
-      _currentIndex > _minIndex && _currentIndex < _maxIndex;
+  bool _isCurrentIndexBiggerThanMin() => _currentIndex > _minIndex;
 
-  bool _isCurrentIndexLastIndexEmpty() => _currentIndex == _maxIndex &&
-      playedLetters[_currentIndex].letter.isEmpty;
+  bool _isCurrentIndexEmpty() => playedLetters[_currentIndex].letter.isEmpty;
 
   Future<void> enterWord() async {
     var lastIndex = playedLetters.length - 1;
@@ -426,13 +428,9 @@ abstract class _MainStore with Store {
   }
 
   void setLetter(String letter) {
+    _setLetter(letter);
     if (_currentIndex < _maxIndex) {
-      _setLetter(letter);
       _currentIndex++;
-    } else {
-      if (playedLetters[_currentIndex].letter.isEmpty) {
-        _setLetter(letter);
-      }
     }
   }
 
@@ -449,8 +447,8 @@ abstract class _MainStore with Store {
     _setPlayedLetters(playedLetters);
   }
 
-  void _eraseLetter() {
-    if (_currentIndex < _maxIndex) {
+  void _eraseLetter(bool changeSelected) {
+    if (changeSelected && _currentIndex < _maxIndex) {
       playedLetters[_currentIndex + 1] = LetterField.updateLetter("");
     }
 
