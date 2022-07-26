@@ -28,7 +28,10 @@ class ShareUtils {
     ScreenshotController().captureFromWidget(
         _getSharingScreen(playedLetters)).then((result) async {
           final tempDir = await getTemporaryDirectory();
-          File file = await File('${tempDir.path}/result.png').create();
+          final currentTime = DateTime.now().millisecondsSinceEpoch;
+          File file = await File(
+              '${tempDir.path}/$currentTime-Five.png'
+          ).create();
           file.writeAsBytesSync(result);
 
           Share.shareFiles([file.path], text: shareText);
