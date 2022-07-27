@@ -43,14 +43,6 @@ class _GridLetterBoxesState extends State<GridLetterBoxes> {
             onTapped: widget.onBoxTapped,
           )
         )).values.toList(),
-        /*children: widget.lettersList.map((letterField) {
-          return LetterBox(
-            hideLetter: widget.hideLetters,
-            letterField: letterField,
-            index: widget.lettersList.indexOf(letterField),
-            onTapped: widget.onBoxTapped,
-          );
-        }).toList()*/
       )
     );
   }
